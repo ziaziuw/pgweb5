@@ -5,25 +5,125 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Leaflet JS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+        integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+
+    <link rel="stylesheet" href="plugin/leaflet-search-master/dist/leaflet-search.min.css">
+    <link rel="stylesheet" href="plugin/Leaflet.defaultextent-master/dist/leaflet.defaultextent.css">
     <style>
         html,
-        body,
-        #map {
+        body {
             width: 100%;
             height: 100%;
             margin: 0;
+        }
+
+        #map {
+            width: 100%;
+            height: calc(100vh - 56px);
         }
     </style>
 </head>
 
 <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#"><i class="fa-solid fa-earth-asia"></i> <i class="fa-regular fa-heart"></i>
+                Penajam Paser Utara</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link" href="http://geoportal.penajamkab.go.id/layers/?limit=5&offset=35"
+                            target="_blank"><i class="fa-solid fa-layer-group"></i> Sumber
+                            Data </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#infoModal"><i
+                                class="fa-solid fa-circle-info"></i> Info</a>
+                    </li>
+
+
+                </ul>
+
+            </div>
+        </div>
+    </nav>
     <div id="map"></div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Info Pembuat</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <table class="table table-stripe">
+                        <tr>
+                            <th>Nama</th>
+                            <td>Adinda Fauzia Azizah</td>
+                        </tr>
+                        <tr>
+                            <th>NIM</th>
+                            <td>23/515141/SV/22484</td>
+                        </tr>
+                        <tr>
+                            <th>Kelas</th>
+                            <td>A</td>
+                        </tr>
+                        <tr>
+                            <th>Github</th>
+                            <td><a href="https://github.com/ziaziuw" target="_blank"
+                                    rel="noopener noreferrer">https://github.com/ziaziuw</a></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature Modal -->
+    <div class="modal fade" id="featureModal" tabindex="-1" aria-labelledby="featureModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="featureModalTitle"></h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="featureModalBody">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <script src="plugin/leaflet-search-master/dist/leaflet-search.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+    <script src="plugin/Leaflet.defaultextent-master/dist/leaflet.defaultextent.js"></script>
+
     <script>
         // Inisialisasi peta
         var map = L.map("map").setView([-1.1963776, 116.5670013], 10);
@@ -59,7 +159,12 @@
 
                 layer.on({
                     click: function (e) {
-                        sarana_prasarana.bindPopup(popup_content);
+                        //sarana_prasarana.bindPopup(popup_content);
+
+                        //Menampilkan feature modal
+                        $("#featureModalTitle").html("Informasi Sarana Prasarana");
+                        $("#featureModalBody").html(popup_content);
+                        $("#featureModal").modal("show");
                     },
                     mouseover: function (e) {
                         sarana_prasarana.bindTooltip(feature.properties.SARANA_PRA, {
@@ -98,7 +203,11 @@
 
                 layer.on({
                     click: function (e) {
-                        jalan.bindPopup(popup_content);
+                        // jalan.bindPopup(popup_content);
+                        //Menampilkan feature modal
+                        $("#featureModalTitle").html("Informasi Jalan");
+                        $("#featureModalBody").html(popup_content);
+                        $("#featureModal").modal("show");
                     },
                     mouseover: function (e) {
                         jalan.bindTooltip(feature.properties.FUNGSI_JAL, {
@@ -115,7 +224,7 @@
             map.addLayer(jalan); // Menambahkan GeoJSON Polyline Jalan ke dalam peta
         });
 
-        var symbologyCategorized = { "Tinggi": "#756bb1", "Sedang": "#bcbddc", "Rendah": "#efedf5" };
+        var symbologyCategorized = { "Tinggi": "#756bb1", "Sedang": "#a6a8c7", "Rendah": "#d7d9e5" };
 
         // GeoJSON Polygon Jumlah Penduduk
         map.createPane('paneJumlahPenduduk');
@@ -140,7 +249,7 @@
                         color: 'black',
                         weight: 1.0,
                         fillOpacity: 0.7,
-                        fillColor: '#ffffb2'
+                        fillColor: '#d7d9e5'
                     }
                 }
                 if (feature.properties.JML_PDDK_1 > 2500 && feature.properties.JML_PDDK_1 <= 5000) {
@@ -149,7 +258,7 @@
                         color: 'black',
                         weight: 1.0,
                         fillOpacity: 0.7,
-                        fillColor: '#fd8d3c'
+                        fillColor: '#a6a8c7'
                     }
                 }
                 if (feature.properties.JML_PDDK_1 > 5000) {
@@ -158,7 +267,7 @@
                         color: 'black',
                         weight: 1.0,
                         fillOpacity: 0.7,
-                        fillColor: '#bd0026'
+                        fillColor: '#756bb1'
                     }
                 }
             },
@@ -166,13 +275,19 @@
             // onEachFeature
             onEachFeature: function (feature, layer) {
                 // variable popup content
-                var popup_content = "Kecamatan: " + feature.properties.KECAMATAN + "<br>" +
-                    "Desa: " + feature.properties.DESA_KELUR + "<br>" +
-                    "Jumlah Penduduk: " + feature.properties.JML_PDDK_1 + " Jiwa";
+                var popup_content =
+                    "<table class='table table-striped table-bodered'>" +
+                    "<tr><th>KECAMATAN</th><td>" + feature.properties.KECAMATAN + "</td></tr>" +
+                    "<tr><th>DESA/KELURAHAN</th><td>" + feature.properties.DESA_KELUR + "</td></tr>" +
+                    "<tr><th>JUMLAH PENDUDUK</th><td>" + feature.properties.JML_PDDK_1 + "</td></tr>";
 
                 layer.on({
                     click: function (e) {
-                        jumlah_penduduk.bindPopup(popup_content);
+                        // jumlah_penduduk.bindPopup(popup_content);
+                        //Menampilkan feature modal
+                        $("#featureModalTitle").html("Informasi Jumlah Penduduk");
+                        $("#featureModalBody").html(popup_content);
+                        $("#featureModal").modal("show");
                     },
                     mouseover: function (e) {
                         jumlah_penduduk.bindTooltip(feature.properties.desa, {
@@ -203,6 +318,63 @@
         var controllayer = L.control.layers(baseMaps, overlayMaps);
         controllayer.addTo(map);
 
+        // Back to Default Extent
+        L.control.defaultExtent()
+            .addTo(map);
+
+        // Search Control
+        var searchControl = new L.Control.Search({
+            layer: jumlah_penduduk,
+            propertyName: 'DESA_KELUR',
+            marker: false,
+            moveToLocation: function (latlng, title, map) {
+                //map.fitBounds( latlng.layer.getBounds() );
+                var zoom = map.getBoundsZoom(latlng.layer.getBounds());
+                map.setView(latlng, zoom); // access the zoom
+            }
+        });
+
+        searchControl.on('search:locationfound', function (e) {
+
+            //console.log('search:locationfound', );
+
+            //map.removeLayer(this._markerSearch)
+
+            e.layer.setStyle({ fillColor: '#3f0', color: '#0f0' });
+            if (e.layer._popup)
+                e.layer.openPopup();
+
+        }).on('search:collapsed', function (e) {
+
+            jumlah_penduduk.eachLayer(function (layer) {	//restore feature color
+                jumlah_penduduk.resetStyle(layer);
+            });
+        });
+
+        map.addControl(searchControl);  //inizialize search control
+
+
+        // Logo Watermark
+        L.Control.Watermark = L.Control.extend({
+            onAdd: function (map) {
+                var img = L.DomUtil.create('img');
+
+                img.src = 'icon/logoSVUGM.png';
+                img.style.width = '200px';
+
+                return img;
+            },
+
+            onRemove: function (map) {
+                // Nothing to do here
+            }
+        });
+
+        L.control.watermark = function (opts) {
+            return new L.Control.Watermark(opts);
+        }
+
+        L.control.watermark({ position: 'bottomleft' }).addTo(map);
     </script>
 </body>
 
